@@ -1,25 +1,26 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[project]
+[tool.poetry]
 name = "spacetraders_sdk"
 version = "2.1.0"
-authors = [
-	{ name="Felix Baumkötter", email="feba@feba66.de" },
-]
+authors = ["Felix Baumkötter <feba@feba66.de>"]
 description = "A python sdk for the SpaceTradersAPI game"
 readme = "README.md"
-requires-python = ">=3.11"
-classifiers = [
-	"Programming Language :: Python :: 3",
-	"License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
-	"Operating System :: OS Independent",
-]
+license = "GPL v2"
 
-[project.urls]
-"Homepage" = "https://github.com/feba66/spacetraders-sdk-v2"
-"Bug Tracker" = "https://github.com/feba66/spacetraders-sdk-v2/issues"
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.1"
+pytest-cov = "^4.1.0"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# [project.urls]
+# "Homepage" = "https://github.com/feba66/spacetraders-sdk-v2"
+# "Bug Tracker" = "https://github.com/feba66/spacetraders-sdk-v2/issues"
 
 [tool.autopep8]
 max_line_length = 120
