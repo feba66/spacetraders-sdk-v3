@@ -2,18 +2,21 @@ import os
 import logging
 import threading
 
+from spacetraders_sdk.spacetraders_constants import LOG_FORMAT
+
+
 class SpaceTradersLogger:
     # region variables
     name: str
     logger: logging.Logger
-    formatter:logging.Formatter
+    formatter: logging.Formatter
     # endregion
 
-    def __init__(self,name="st-logger") -> None:
+    def __init__(self, name="st-logger") -> None:
         # region inits
-        self.name=name
+        self.name = name
         self.logger = logging.getLogger(f"{name}-{threading.current_thread().name}")
-        self.formatter = logging.Formatter("%(asctime)s - %(thread)d - %(name)s - %(levelname)s - %(message)s")
+        self.formatter = logging.Formatter(LOG_FORMAT)
         if not self.logger.hasHandlers():
             self.logger.setLevel(logging.DEBUG)
 
@@ -30,13 +33,18 @@ class SpaceTradersLogger:
             self.logger.addHandler(fh)
             self.logger.addHandler(ch)
         # endregion
-    def debug(self,msg: object):
+
+    def debug(self, msg: object):
         self.logger.debug(msg)
-    def info(self,msg: object):
+
+    def info(self, msg: object):
         self.logger.info(msg)
-    def warn(self,msg: object,*args: object):
-        self.logger.warning(msg,args)
-    def error(self,msg: object,*args: object):
-        self.logger.error(msg,args)
-    def fatal(self,msg: object,*args: object):
-        self.logger.fatal(msg,args)
+
+    def warn(self, msg: object, *args: object):
+        self.logger.warning(msg, args)
+
+    def error(self, msg: object, *args: object):
+        self.logger.error(msg, args)
+
+    def fatal(self, msg: object, *args: object):
+        self.logger.fatal(msg, args)
