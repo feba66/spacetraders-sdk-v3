@@ -1,10 +1,10 @@
 [tool.poetry]
 name = "spacetraders_sdk"
-version = "2.3.1.1"
+version = "2.3.1.2"
 authors = ["Felix Baumkötter <stsdk@feba66.de>"]
 description = "A python sdk for the SpaceTradersAPI game"
 readme = "README.md"
-license = "GPL v2"
+license = "GPLv2"
 
 [tool.poetry.dependencies]
 python = "^3.10"
