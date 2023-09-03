@@ -18,9 +18,9 @@ pytest-cov = "^4.1.0"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-# [project.urls]
-# "Homepage" = "https://github.com/feba66/spacetraders-sdk-v2"
-# "Bug Tracker" = "https://github.com/feba66/spacetraders-sdk-v2/issues"
+[tool.poetry.urls]
+"Homepage" = "https://github.com/feba66/spacetraders-sdk-v3"
+"Bug Tracker" = "https://github.com/feba66/spacetraders-sdk-v3/issues"
 
 [tool.autopep8]
 max_line_length = 120
