@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "spacetraders_sdk"
-version = "2.3.1"
+version = "2.3.1.1"
 authors = ["Felix Baumkötter <stsdk@feba66.de>"]
 description = "A python sdk for the SpaceTradersAPI game"
 readme = "README.md"
