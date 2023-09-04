@@ -7,7 +7,7 @@ import logging
 import requests
 import json
 import os
-from spacetraders_sdk.spacetraders_enums import FactionSymbol
+from spacetraders_sdk.spacetraders_enums import FactionSymbol, Produce, ShipNavFlightMode, TradeSymbol
 from spacetraders_sdk.ratelimit import BurstyLimiter, Limiter
 from spacetraders_sdk.spacetraders_helper import system_symbol_from_waypoint_symbol
 from spacetraders_sdk.spacetraders_logger import SpaceTradersLogger
@@ -234,7 +234,11 @@ class SpaceTradersApi:
 		r = self.my_req(path, "post")
 		return r
 
-	# refine
+	def refine(self, ship_symbol: str,produce:Produce):
+		path = f"/my/ships/{ship_symbol}/refine"
+		r = self.my_req(path, "post",data={"produce":produce})
+		return r
+
 	def chart(self, ship_symbol: str):
 		path = f"/my/ships/{ship_symbol}/chart"
 		r = self.my_req(path, "post")
@@ -259,7 +263,11 @@ class SpaceTradersApi:
 		path = f"/my/ships/{ship_symbol}/extract"
 		r = self.my_req(path, "post", json={"survey": survey}) if survey else self.my_req(path, "post")
 		return r
-	# jettison
+	
+	def jettison(self, ship_symbol: str,symbol:TradeSymbol,units:int):
+		path = f"/my/ships/{ship_symbol}/jettison"
+		r = self.my_req(path, "post",data={"symbol":symbol})
+		return r
 
 	def jump(self, ship_symbol: str, system_symbol: str):
 		path = f"/my/ships/{ship_symbol}/jump"
@@ -269,6 +277,16 @@ class SpaceTradersApi:
 	def navigate(self, ship_symbol: str, waypoint_symbol: str):
 		path = f"/my/ships/{ship_symbol}/navigate"
 		r = self.my_req(path, "post", data={"waypointSymbol": waypoint_symbol})
+		return r
+
+	def get_nav(self, ship_symbol: str):
+		path = f"/my/ships/{ship_symbol}/nav"
+		r = self.my_req(path, "get")
+		return r
+
+	def patch_nav(self, ship_symbol: str, flight_mode: ShipNavFlightMode):
+		path = f"/my/ships/{ship_symbol}/nav"
+		r = self.my_req(path, "post", data={"flightMode": flight_mode})
 		return r
 
 	def warp(self, ship_symbol: str, waypoint_symbol: str):
@@ -283,6 +301,19 @@ class SpaceTradersApi:
 	# scan systems
 	# scan waypoints
 	# scan ships
+
+	def scan_systems(self, ship_symbol: str):
+		path = f"/my/ships/{ship_symbol}/scan/systems"
+		r = self.my_req(path, "post")
+		return r
+	def scan_waypoints(self, ship_symbol: str):
+		path = f"/my/ships/{ship_symbol}/scan/waypoints"
+		r = self.my_req(path, "post")
+		return r
+	def scan_shipss(self, ship_symbol: str):
+		path = f"/my/ships/{ship_symbol}/scan/ships"
+		r = self.my_req(path, "post")
+		return r
 
 	def get_mounts(self,ship_symbol: str):
 		path = f"/my/ships/{ship_symbol}/mounts"

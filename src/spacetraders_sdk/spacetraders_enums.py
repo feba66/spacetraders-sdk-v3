@@ -29,6 +29,16 @@ class Deposits(myEnum):
     URANITE_ORE = "URANITE_ORE"
     MERITIUM_ORE = "MERITIUM_ORE"
 
+class Produce(myEnum):
+    IRON="IRON",
+    COPPER="COPPER",
+    SILVER="SILVER",
+    GOLD="GOLD",
+    ALUMINUM="ALUMINUM",
+    PLATINUM="PLATINUM",
+    URANITE="URANITE",
+    MERITIUM="MERITIUM",
+    FUEL="FUEL"
 
 class ShipRole(myEnum):
     FABRICATOR = "FABRICATOR"

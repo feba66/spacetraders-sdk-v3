@@ -43,23 +43,23 @@ Class          | HTTP request  | Description   | Implemented
 | *Fleet*      | **get** /my/ships/{shipSymbol} | Retrieve the details of your ship. |   api
 | *Fleet*      | **get** /my/ships/{shipSymbol}/cargo | Retrieve the cargo of your ship. |   api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/orbit | Orbit Ship |  api
-| *Fleet*      | **post** /my/ships/{shipSymbol}/refine | Ship Refine | 
+| *Fleet*      | **post** /my/ships/{shipSymbol}/refine | Ship Refine | api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/chart | Create Chart |  api
 | *Fleet*      | **get** /my/ships/{shipSymbol}/cooldown | Get Ship Cooldown | api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/dock | Dock Ship |  api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/survey | Create Survey | api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/extract | Extract Resources |  api
-| *Fleet*      | **post** /my/ships/{shipSymbol}/jettison | Jettison Cargo | 
+| *Fleet*      | **post** /my/ships/{shipSymbol}/jettison | Jettison Cargo | api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/jump | Jump Ship |  api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/navigate | Navigate Ship |  api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/negotiate/contract | Negotiate Contract | api
-| *Fleet*      | **patch** /my/ships/{shipSymbol}/nav | Patch Ship Nav | 
-| *Fleet*      | **get** /my/ships/{shipSymbol}/nav | Get Ship Nav | 
+| *Fleet*      | **patch** /my/ships/{shipSymbol}/nav | Patch Ship Nav | api
+| *Fleet*      | **get** /my/ships/{shipSymbol}/nav | Get Ship Nav | api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/warp | Warp Ship |  api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/sell | Sell Cargo |  api
-| *Fleet*      | **post** /my/ships/{shipSymbol}/scan/systems | Scan Systems | 
-| *Fleet*      | **post** /my/ships/{shipSymbol}/scan/waypoints | Scan Waypoints | 
-| *Fleet*      | **post** /my/ships/{shipSymbol}/scan/ships | Scan Ships | 
+| *Fleet*      | **post** /my/ships/{shipSymbol}/scan/systems | Scan Systems | api
+| *Fleet*      | **post** /my/ships/{shipSymbol}/scan/waypoints | Scan Waypoints | api
+| *Fleet*      | **post** /my/ships/{shipSymbol}/scan/ships | Scan Ships | api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/refuel | Refuel Ship |  api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/purchase | Purchase Cargo |  api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/transfer | Transfer Cargo |  api
@@ -76,4 +76,4 @@ Class          | HTTP request  | Description   | Implemented
 | *Systems*    | **get** /systems/{systemSymbol}/waypoints/{waypointSymbol}/jump-gate | Get Jump Gate | api
 
 
-api: 41/48
+api: 48/48
