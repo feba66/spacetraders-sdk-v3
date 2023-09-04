@@ -298,18 +298,17 @@ class SpaceTradersApi:
 		path = f"/my/ships/{ship_symbol}/sell"
 		r = self.my_req(path, "post", data={"symbol": symbol, "units": units})
 		return r
-	# scan systems
-	# scan waypoints
-	# scan ships
 
 	def scan_systems(self, ship_symbol: str):
 		path = f"/my/ships/{ship_symbol}/scan/systems"
 		r = self.my_req(path, "post")
 		return r
+
 	def scan_waypoints(self, ship_symbol: str):
 		path = f"/my/ships/{ship_symbol}/scan/waypoints"
 		r = self.my_req(path, "post")
 		return r
+
 	def scan_shipss(self, ship_symbol: str):
 		path = f"/my/ships/{ship_symbol}/scan/ships"
 		r = self.my_req(path, "post")
