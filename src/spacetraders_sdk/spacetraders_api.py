@@ -85,11 +85,10 @@ class SpaceTradersApi:
 
 		j = r.json()
 		data = j["data"] if "data" in j else None
-		if not data:
-			raise Exception(r)
-		token = data["token"]
-		if login:
-			self.Login(token)
+		if data:
+			token = data["token"]
+			if login:
+				self.Login(token)
 		return r
 
 	def status(self):
