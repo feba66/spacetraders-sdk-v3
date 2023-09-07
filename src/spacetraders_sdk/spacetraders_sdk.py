@@ -44,3 +44,18 @@ class SpaceTradersSDK:
                 
                 return token, agent, contract, faction, ship
         return r
+    def get_my_agent(self):
+        r = self.api.get_my_agent()
+        
+        if r.status_code == 200:
+            data = r.json()
+            if "data" in data:
+                data = data["data"]
+                agent = from_dict(Agent,data)
+                self.agent=agent
+                return agent
+        return r
+    def navigate(self,ship:Ship|str,waypoint:str):
+        r:Response = self.api.navigate(ship if isinstance(ship,str) else ship.symbol,waypoint)
+        # wip
+        return r

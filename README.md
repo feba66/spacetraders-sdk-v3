@@ -27,8 +27,8 @@ status = st.status()
 Class          | HTTP request  | Description   | Implemented
 ------------   | ------------- | ------------- | -------------
 |              | **get** /     | Status        | api
-|              | **post** /register | Register New Agent | api
-| *Agents*     | **get** /my/agent | Fetch your agent's details. | api
+|              | **post** /register | Register New Agent | api & sdk
+| *Agents*     | **get** /my/agent | Fetch your agent's details. | api & sdk
 | *Agents*     | **get** /agents | List all Agents. | api
 | *Agents*     | **get** /agents/{agent_symbol} | Get Agent. | api
 | *Contracts*  | **get** /my/contracts | List all of your contracts. | api
