@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional
 from spacetraders_sdk.spacetraders_enums import (
     ContractType,
+    Deposits,
     FactionSymbol,
     FactionTraitSymbol,
     MarketTradeGoodSupply,
@@ -15,6 +16,7 @@ from spacetraders_sdk.spacetraders_enums import (
     ShipNavFlightMode,
     ShipNavStatus,
     ShipReactorType,
+    ShipRole,
     ShipType,
     SurveySize,
     SystemType,
@@ -38,6 +40,7 @@ class Agent:
     headquarters: str
     credits: int
     startingFaction: str
+    shipCount: Optional[int]
 
 
 @dataclass
@@ -63,14 +66,14 @@ class ContractTerms:
 
 @dataclass
 class Contract:
-    terms: ContractTerms
+    id: str
     factionSymbol: str
-    fulfilled: bool
+    type: ContractType
+    terms: ContractTerms
     accepted: bool
+    fulfilled: bool
     expiration: Optional[str]
     deadlineToAccept: Optional[str]
-    id: str
-    type: ContractType
 
 
 @dataclass
@@ -92,9 +95,9 @@ class Faction:
 
 @dataclass
 class ShipRequirements:
-    power: int
-    crew: int
-    slots: int
+    power: Optional[int]
+    crew: Optional[int]
+    slots: Optional[int]
 
 
 @dataclass
@@ -127,12 +130,12 @@ class Consumed:
 class ShipFuel:
     current: int
     capacity: int
-    consumed: Consumed
+    consumed: Optional[Consumed]
 
 
 @dataclass
 class ShipCargoItem:
-    symbol: str
+    symbol: TradeSymbol
     name: str
     description: str
     units: int
@@ -145,16 +148,26 @@ class ShipModule:
     name: str
     capacity: Optional[int]
     range: Optional[int]
-    description: Optional[str]
+    description: str
+
+
+@dataclass
+class ShipModificationTransaction:
+    waypointSymbol: str
+    shipSymbol: str
+    tradeSymbol: str
+    totalPrice: int
+    timestamp: str
 
 
 @dataclass
 class ShipMount:
     symbol: ShipMountType
-    requirements: ShipRequirements
     name: str
     description: Optional[str]
     strength: Optional[int]
+    deposits: Optional[list[Deposits]]
+    requirements: ShipRequirements
 
 
 @dataclass
@@ -179,19 +192,19 @@ class ShipFrame:
 @dataclass
 class ShipCrew:
     # The amount of credits per crew member paid per hour. Wages are paid when a ship docks at a civilized waypoint.
-    wages: int
     current: int
-    rotation: ShipCrewRotation
-    morale: int
     required: int
     capacity: int
+    rotation: ShipCrewRotation
+    morale: int
+    wages: int
 
 
 @dataclass
 class ShipRegistration:
-    role: str
+    role: ShipRole
     name: str
-    factionSymbol: Optional[str]
+    factionSymbol: str
 
 
 @dataclass
@@ -223,16 +236,16 @@ class ShipNav:
 @dataclass
 class Ship:
     symbol: str
-    nav: ShipNav
-    engine: ShipEngine
-    fuel: ShipFuel
-    reactor: ShipReactor
-    mounts: list[ShipMount]
     registration: ShipRegistration
-    cargo: ShipCargo
-    modules: list[ShipModule]
+    nav: ShipNav
     crew: ShipCrew
     frame: ShipFrame
+    reactor: ShipReactor
+    engine: ShipEngine
+    modules: list[ShipModule]
+    mounts: list[ShipMount]
+    cargo: ShipCargo
+    fuel: ShipFuel
 
 
 @dataclass
@@ -242,6 +255,9 @@ class SystemWaypoint:
     y: int
     type: WaypointType
 
+@dataclass
+class SystemFaction:
+    symbol:FactionSymbol
 
 @dataclass
 class System:
@@ -251,7 +267,7 @@ class System:
     y: int
     type: SystemType
     waypoints: list[SystemWaypoint]
-    factions: list[str]
+    factions: list[SystemFaction]
 
 
 @dataclass
@@ -268,6 +284,7 @@ class WaypointFaction:
 
 @dataclass
 class Chart:
+    waypointSymbol: Optional[str]
     submittedBy: Optional[str]
     submittedOn: Optional[str]
 
@@ -292,6 +309,7 @@ class Waypoint:
 
 @dataclass
 class ShipyardTransaction:
+    waypointSymbol:str
     price: int
     agentSymbol: str
     timestamp: str
@@ -328,6 +346,7 @@ class TradeGood:
 
 @dataclass
 class MarketTransaction:
+    waypointSymbol: str
     shipSymbol: str
     units: int
     type: MarketTransactionType
@@ -365,8 +384,8 @@ class Market:
 @dataclass
 class ConnectedSystem:
     symbol: str
-    distance: int
     sectorSymbol: str
+    distance: int
     x: int
     y: int
     type: SystemType
@@ -386,12 +405,11 @@ class Cooldown:
     totalSeconds: int
     expiration: str
     shipSymbol: str
-    expiredAt: Optional[str]
 
 
 @dataclass
 class SurveyDeposit:
-    symbol: str
+    symbol: Deposits
 
 
 @dataclass
@@ -401,12 +419,12 @@ class Survey:
     signature: str
     expiration: str
     deposits: list[SurveyDeposit]
-    timestamp: Optional[datetime]
+    timestamp: Optional[datetime] # custom
 
 
 @dataclass
 class ExtractionYield:
-    symbol: str
+    symbol: TradeSymbol
     units: int
 
 
@@ -420,3 +438,48 @@ class Extraction:
 class Error:
     message: str
     code: int
+
+
+@dataclass
+class ShipScanFrame:
+    symbol: ShipFrameType
+
+
+@dataclass
+class ShipScanReactor:
+    symbol: ShipReactorType
+
+
+@dataclass
+class ShipScanEngine:
+    symbol: ShipEngineType
+
+
+@dataclass
+class ShipScanMount:
+    symbol: ShipMountType
+
+
+@dataclass
+class ScannedShip:
+    symbol: str
+    registration: ShipRegistration
+    nav: ShipNav
+    frame: Optional[ShipScanFrame]
+    reactor: Optional[ShipScanReactor]
+    engine: ShipScanReactor
+    mounts: Optional[list[ShipMountType]]
+
+
+@dataclass
+class ScannedSystem:
+    symbol: str
+    sectorSymbol: str
+    x: int
+    y: int
+    type: SystemType
+    distance: int
+
+
+class ScannedWaypoint(Waypoint):
+    pass

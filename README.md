@@ -77,3 +77,27 @@ Class          | HTTP request  | Description   | Implemented
 
 
 api: 48/48
+
+
+Completed Objects:
+    Agent
+    Chart
+    ConnectedSystem
+    Contract
+    Cooldown
+    Extraction
+    Faction
+    JumpGate
+    Market
+    ScannedShip
+    ScannedSystem
+    ScannedWaypoint
+    Ship
+    ShipCondition -> int
+    Shipyard
+    Survey
+    System
+    TradeSymbol
+    Waypoint
+
+
