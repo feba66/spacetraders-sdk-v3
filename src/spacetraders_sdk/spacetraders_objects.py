@@ -236,6 +236,14 @@ class ShipNav:
 
 
 @dataclass
+class Cooldown:
+    remainingSeconds: int
+    totalSeconds: int
+    expiration: str
+    shipSymbol: str
+
+
+@dataclass
 class Ship:
     symbol: str
     registration: ShipRegistration
@@ -244,6 +252,7 @@ class Ship:
     frame: ShipFrame
     reactor: ShipReactor
     engine: ShipEngine
+    cooldown: Cooldown
     modules: list[ShipModule]
     mounts: list[ShipMount]
     cargo: ShipCargo
@@ -400,14 +409,6 @@ class JumpGate:
     connectedSystems: list[ConnectedSystem]
     jumpRange: int
     factionSymbol: Optional[str]
-
-
-@dataclass
-class Cooldown:
-    remainingSeconds: int
-    totalSeconds: int
-    expiration: str
-    shipSymbol: str
 
 
 @dataclass
