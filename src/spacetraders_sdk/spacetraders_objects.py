@@ -341,6 +341,12 @@ class ShipyardTransaction:
 
 
 @dataclass
+class ShipyardShipCrew:
+    required:int
+    capacity:int
+
+
+@dataclass
 class ShipyardShip:
     engine: ShipEngine
     reactor: ShipReactor
@@ -351,6 +357,7 @@ class ShipyardShip:
     modules: list[ShipModule]
     frame: ShipFrame
     type: Optional[ShipType]
+    crew: ShipyardShipCrew
 
 
 @dataclass
