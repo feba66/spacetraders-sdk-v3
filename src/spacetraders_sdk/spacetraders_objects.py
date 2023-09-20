@@ -260,22 +260,36 @@ class Ship:
 
 
 @dataclass
+class WaypointOrbital:
+    symbol: str
+
+
+@dataclass
 class SystemWaypoint:
     symbol: str
     x: int
+    """Relative position of the waypoint on the system's x axis. This is not an absolute position in the universe."""
     y: int
+    """Relative position of the waypoint on the system's y axis. This is not an absolute position in the universe."""
     type: WaypointType
+    orbitals:list[WaypointOrbital]
+    """Waypoints that orbit this waypoint."""
+    orbits:Optional[str]
+    """The symbol of the parent waypoint, if this waypoint is in orbit around another waypoint. Otherwise this value is undefined."""
 
 @dataclass
 class SystemFaction:
     symbol:FactionSymbol
+
 
 @dataclass
 class System:
     symbol: str
     sectorSymbol: str
     x: int
+    """Relative position of the system in the sector in the x axis."""
     y: int
+    """Relative position of the system in the sector in the y axis."""
     type: SystemType
     waypoints: list[SystemWaypoint]
     factions: list[SystemFaction]
@@ -301,19 +315,18 @@ class Chart:
 
 
 @dataclass
-class WaypointOrbital:
-    symbol: str
-
-
-@dataclass
 class Waypoint:
     symbol: str
     traits: list[WaypointTrait]
     systemSymbol: str
     x: int
+    """Relative position of the waypoint on the system's x axis. This is not an absolute position in the universe."""
     y: int
+    """Relative position of the waypoint on the system's y axis. This is not an absolute position in the universe."""
     type: WaypointType
     orbitals: list[WaypointOrbital]
+    orbits:Optional[str]
+    """The symbol of the parent waypoint, if this waypoint is in orbit around another waypoint. Otherwise this value is undefined."""
     faction: Optional[WaypointFaction]
     chart: Optional[Chart]
 
