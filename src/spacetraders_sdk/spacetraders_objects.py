@@ -335,7 +335,8 @@ class Shipyard:
     symbol: str
     transactions: Optional[list[ShipyardTransaction]]
     ships: Optional[list[ShipyardShip]]
-
+    modificationsFee:int
+    """The fee to modify a ship at this shipyard. This includes installing or removing modules and mounts on a ship. In the case of mounts, the fee is a flat rate per mount. In the case of modules, the fee is per slot the module occupies."""
 
 @dataclass
 class TradeGood:
