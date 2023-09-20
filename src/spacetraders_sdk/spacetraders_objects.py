@@ -221,7 +221,9 @@ class ShipNavRoute:
     arrival: str
     departureTime: str
     destination: ShipNavRouteWaypoint
-    departure: ShipNavRouteWaypoint
+    departure: Optional[ShipNavRouteWaypoint]
+    """Deprecated. Use origin instead."""
+    origin:ShipNavRouteWaypoint
 
 
 @dataclass
