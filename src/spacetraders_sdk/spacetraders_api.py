@@ -262,6 +262,11 @@ class SpaceTradersApi:
 		path = f"/my/ships/{ship_symbol}/extract"
 		r = self.my_req(path, "post", json={"survey": survey}) if survey else self.my_req(path, "post")
 		return r
+
+	def extract_with_survey(self, ship_symbol: str, survey: dict):
+		path = f"/my/ships/{ship_symbol}/extract/survey"
+		r = self.my_req(path, "post", json={"survey": survey})
+		return r
 	
 	def jettison(self, ship_symbol: str,symbol:TradeSymbol,units:int):
 		path = f"/my/ships/{ship_symbol}/jettison"
