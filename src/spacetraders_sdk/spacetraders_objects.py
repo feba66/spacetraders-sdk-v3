@@ -223,7 +223,7 @@ class ShipNavRoute:
     destination: ShipNavRouteWaypoint
     departure: Optional[ShipNavRouteWaypoint]
     """Deprecated. Use origin instead."""
-    origin:ShipNavRouteWaypoint
+    origin: ShipNavRouteWaypoint
 
 
 @dataclass
@@ -272,14 +272,15 @@ class SystemWaypoint:
     y: int
     """Relative position of the waypoint on the system's y axis. This is not an absolute position in the universe."""
     type: WaypointType
-    orbitals:list[WaypointOrbital]
+    orbitals: list[WaypointOrbital]
     """Waypoints that orbit this waypoint."""
-    orbits:Optional[str]
+    orbits: Optional[str]
     """The symbol of the parent waypoint, if this waypoint is in orbit around another waypoint. Otherwise this value is undefined."""
+
 
 @dataclass
 class SystemFaction:
-    symbol:FactionSymbol
+    symbol: FactionSymbol
 
 
 @dataclass
@@ -325,7 +326,7 @@ class Waypoint:
     """Relative position of the waypoint on the system's y axis. This is not an absolute position in the universe."""
     type: WaypointType
     orbitals: list[WaypointOrbital]
-    orbits:Optional[str]
+    orbits: Optional[str]
     """The symbol of the parent waypoint, if this waypoint is in orbit around another waypoint. Otherwise this value is undefined."""
     faction: Optional[WaypointFaction]
     chart: Optional[Chart]
@@ -333,7 +334,7 @@ class Waypoint:
 
 @dataclass
 class ShipyardTransaction:
-    waypointSymbol:str
+    waypointSymbol: str
     price: int
     agentSymbol: str
     timestamp: str
@@ -342,8 +343,8 @@ class ShipyardTransaction:
 
 @dataclass
 class ShipyardShipCrew:
-    required:int
-    capacity:int
+    required: int
+    capacity: int
 
 
 @dataclass
@@ -366,8 +367,9 @@ class Shipyard:
     symbol: str
     transactions: Optional[list[ShipyardTransaction]]
     ships: Optional[list[ShipyardShip]]
-    modificationsFee:int
+    modificationsFee: int
     """The fee to modify a ship at this shipyard. This includes installing or removing modules and mounts on a ship. In the case of mounts, the fee is a flat rate per mount. In the case of modules, the fee is per slot the module occupies."""
+
 
 @dataclass
 class TradeGood:
@@ -443,7 +445,7 @@ class Survey:
     signature: str
     expiration: str
     deposits: list[SurveyDeposit]
-    timestamp: Optional[datetime] # custom
+    timestamp: Optional[datetime]  # custom
 
 
 @dataclass
