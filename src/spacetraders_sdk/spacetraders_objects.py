@@ -239,7 +239,7 @@ class ShipNav:
 class Cooldown:
     remainingSeconds: int
     totalSeconds: int
-    expiration: str
+    expiration: Optional[str]
     shipSymbol: str
 
 
