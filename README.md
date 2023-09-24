@@ -38,7 +38,7 @@ Class          | HTTP request  | Description   | Implemented
 | *Contracts*  | **post** /my/contracts/{contractId}/fulfill | Fulfill a contract | api
 | *Factions*   | **get** /factions | List all discovered factions in the game. |  api
 | *Factions*   | **get** /factions/{factionSymbol} | View the details of a faction. |  api
-| *Fleet*      | **get** /my/ships | Retrieve all of your ships. |  api
+| *Fleet*      | **get** /my/ships | Retrieve all of your ships. |  api & sdk
 | *Fleet*      | **post** /my/ships | Purchase a ship |  api
 | *Fleet*      | **get** /my/ships/{shipSymbol} | Retrieve the details of your ship. |   api
 | *Fleet*      | **get** /my/ships/{shipSymbol}/cargo | Retrieve the cargo of your ship. |   api
@@ -69,7 +69,7 @@ Class          | HTTP request  | Description   | Implemented
 | *Systems*    | **get** /systems | List Systems |  api
 | *Systems*    | **get** /systems.json | Get all systems. |   api
 | *Systems*    | **get** /systems/{systemSymbol} | Get System |  api
-| *Systems*    | **get** /systems/{systemSymbol}/waypoints | List Waypoints |  api
+| *Systems*    | **get** /systems/{systemSymbol}/waypoints | List Waypoints |  api & sdk
 | *Systems*    | **get** /systems/{systemSymbol}/waypoints/{waypointSymbol} | Get Waypoint |  api
 | *Systems*    | **get** /systems/{systemSymbol}/waypoints/{waypointSymbol}/market | Get Market |  api
 | *Systems*    | **get** /systems/{systemSymbol}/waypoints/{waypointSymbol}/shipyard | Get Shipyard |  api
