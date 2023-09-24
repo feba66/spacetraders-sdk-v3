@@ -6,7 +6,7 @@ from spacetraders_sdk.spacetraders_sdk import SpaceTradersSDK
 
 def test_register():
     sdk = SpaceTradersSDK()
-    r = sdk.register("testfeba10",FactionSymbol.COSMIC)
+    r = sdk.register("testfeba11",FactionSymbol.COSMIC)
     print(r)
     if isinstance(r,Response):
         assert r.status_code == 201 or r.status_code == 409
@@ -16,7 +16,9 @@ def test_1():
     load_dotenv(find_dotenv(".env"))
     sdk = SpaceTradersSDK()
     sdk.Login(os.getenv("TEST_TOKEN"))
-    sdk.get_my_agent()
+    # sdk.get_my_agent()
+    # print(sdk.get_waypoints("X1-V94"))
+    print(sdk.get_ships())
 
 if __name__ == "__main__":
     test_1()

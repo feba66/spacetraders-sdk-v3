@@ -2,7 +2,7 @@ from dacite import from_dict, Config
 from requests import Response
 from spacetraders_sdk.spacetraders_api import SpaceTradersApi
 from spacetraders_sdk.spacetraders_enums import FactionSymbol, ContractType, Deposits, ErrorCodes, FactionTraitSymbol, MarketTradeGoodSupply, MarketTransactionType, Produce, ShipCrewRotation, ShipEngineType, ShipFrameType, ShipModuleType, ShipMountType, ShipNavFlightMode, ShipNavStatus, ShipReactorType, ShipRole, ShipType, SurveySize, SystemType, TradeSymbol, WaypointTraitSymbols, WaypointType
-from spacetraders_sdk.spacetraders_objects import Agent, Contract, Faction, Ship
+from spacetraders_sdk.spacetraders_objects import Agent, Contract, Faction, Meta, Ship, Waypoint
 
 
 class SpaceTradersSDK:
@@ -36,26 +36,62 @@ class SpaceTradersSDK:
                 contract = from_dict(Contract, data["contract"], self.dacite_conf)
                 faction = from_dict(Faction, data["faction"], self.dacite_conf)
                 ship = from_dict(Ship, data["ship"], self.dacite_conf)
-                
-                self.agent=agent
-                self.contracts[contract.id]=contract
-                self.ships[ship.symbol]=ship
-                self.faction=faction
-                
+
+                self.agent = agent
+                self.contracts[contract.id] = contract
+                self.ships[ship.symbol] = ship
+                self.faction = faction
+
                 return token, agent, contract, faction, ship
         return r
+
     def get_my_agent(self):
         r = self.api.get_my_agent()
-        
+
         if r.status_code == 200:
             data = r.json()
             if "data" in data:
                 data = data["data"]
-                agent = from_dict(Agent,data)
-                self.agent=agent
+                agent = from_dict(Agent, data)
+                self.agent = agent
                 return agent
         return r
-    def navigate(self,ship:Ship|str,waypoint:str):
-        r:Response = self.api.navigate(ship if isinstance(ship,str) else ship.symbol,waypoint)
+
+    def navigate(self, ship: Ship | str, waypoint: str):
+        r: Response = self.api.navigate(ship if isinstance(ship, str) else ship.symbol, waypoint)
         # wip
+        return r
+
+    def get_waypoints(self, system_symbol: str, page=1, limit=20):
+        r: Response = self.api.get_waypoints(system_symbol, page, limit)
+        if r.status_code == 200:
+            data = r.json()
+            if "meta" in data:
+                meta = from_dict(Meta, data["meta"], self.dacite_conf)
+            else:
+                meta = None
+            if "data" in data:
+                data = data["data"]
+                waypoints = []
+                for wp in data:
+                    waypoint = from_dict(Waypoint, wp, self.dacite_conf)
+                    waypoints.append(waypoint)
+                return waypoints, meta
+        return r
+
+    def get_ships(self, page=1, limit=20):
+        r: Response = self.api.get_ships(page, limit)
+        if r.status_code == 200:
+            data = r.json()
+            if "meta" in data:
+                meta = from_dict(Meta, data["meta"], self.dacite_conf)
+            else:
+                meta = None
+            if "data" in data:
+                data = data["data"]
+                ships = []
+                for s in data:
+                    ship = from_dict(Ship, s, self.dacite_conf)
+                    ships.append(ship)
+                return ships, meta
         return r
