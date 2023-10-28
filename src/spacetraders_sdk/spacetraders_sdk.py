@@ -1,7 +1,7 @@
 from dacite import from_dict, Config
 from requests import Response
 from spacetraders_sdk.spacetraders_api import SpaceTradersApi
-from spacetraders_sdk.spacetraders_enums import FactionSymbol, ContractType, Deposits, ErrorCodes, FactionTraitSymbol, MarketTradeGoodSupply, MarketTransactionType, Produce, ShipCrewRotation, ShipEngineType, ShipFrameType, ShipModuleType, ShipMountType, ShipNavFlightMode, ShipNavStatus, ShipReactorType, ShipRole, ShipType, SurveySize, SystemType, TradeSymbol, WaypointTraitSymbols, WaypointType
+from spacetraders_sdk.spacetraders_enums import FactionSymbol, ContractType, Deposits, ErrorCodes, FactionTraitSymbol, SupplyLevel, ActivityLevel, MarketTransactionType, Produce, ShipCrewRotation, ShipEngineType, ShipFrameType, ShipModuleType, ShipMountType, ShipNavFlightMode, ShipNavStatus, ShipReactorType, ShipRole, ShipType, SurveySize, SystemType, TradeSymbol, WaypointTraitSymbols, WaypointType
 from spacetraders_sdk.spacetraders_objects import Agent, Contract, Faction, Meta, Ship, Waypoint
 
 
@@ -17,7 +17,7 @@ class SpaceTradersSDK:
         self.api = SpaceTradersApi(url=url)
         if token:
             self.api.Login(token)
-        self.dacite_conf = Config(cast=[FactionSymbol, ContractType, Deposits, ErrorCodes, FactionTraitSymbol, MarketTradeGoodSupply, MarketTransactionType, Produce, ShipCrewRotation, ShipEngineType,
+        self.dacite_conf = Config(cast=[FactionSymbol, ContractType, Deposits, ErrorCodes, FactionTraitSymbol, SupplyLevel, ActivityLevel, MarketTransactionType, Produce, ShipCrewRotation, ShipEngineType,
                                   ShipFrameType, ShipModuleType, ShipMountType, ShipNavFlightMode, ShipNavStatus, ShipReactorType, ShipRole, ShipType, SurveySize, SystemType, TradeSymbol, WaypointTraitSymbols, WaypointType])
 
     def Login(self, token):
@@ -93,7 +93,7 @@ class SpaceTradersSDK:
                     ships.append(ship)
                 return ships, meta
         return r
-    
+
     def navigate(self, ship: Ship | str, waypoint: str):
         r: Response = self.api.navigate(ship if isinstance(ship, str) else ship.symbol, waypoint)
         # wip
