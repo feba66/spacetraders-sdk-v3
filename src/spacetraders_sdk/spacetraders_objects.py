@@ -2,11 +2,12 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 from spacetraders_sdk.spacetraders_enums import (
+    ActivityLevel,
     ContractType,
     Deposits,
     FactionSymbol,
     FactionTraitSymbol,
-    MarketTradeGoodSupply,
+    MarketTradeGoodType,
     MarketTransactionType,
     ShipCrewRotation,
     ShipEngineType,
@@ -18,9 +19,11 @@ from spacetraders_sdk.spacetraders_enums import (
     ShipReactorType,
     ShipRole,
     ShipType,
+    SupplyLevel,
     SurveySize,
     SystemType,
     TradeSymbol,
+    WaypointModifierType,
     WaypointTraitSymbols,
     WaypointType,
 )
@@ -316,6 +319,11 @@ class Chart:
 
 
 @dataclass
+class WaypointModifier:
+    symbol:WaypointModifierType
+    name:str
+    description:str
+@dataclass
 class Waypoint:
     symbol: str
     traits: list[WaypointTrait]
@@ -326,6 +334,8 @@ class Waypoint:
     """Relative position of the waypoint on the system's y axis. This is not an absolute position in the universe."""
     type: WaypointType
     orbitals: list[WaypointOrbital]
+    modifiers:Optional[WaypointModifier]
+    isUnderConstruction:bool
     orbits: Optional[str]
     """The symbol of the parent waypoint, if this waypoint is in orbit around another waypoint. Otherwise this value is undefined."""
     faction: Optional[WaypointFaction]
@@ -359,6 +369,8 @@ class ShipyardShip:
     frame: ShipFrame
     type: Optional[ShipType]
     crew: ShipyardShipCrew
+    supply: SupplyLevel
+    activity: Optional[ActivityLevel]
 
 
 @dataclass
@@ -398,11 +410,15 @@ class Transaction:
 
 @dataclass
 class MarketTradeGood:
+    type: MarketTradeGoodType
+    """The type of trade good (export, import, or exchange)."""
     tradeVolume: int
+    """This is the maximum number of units that can be purchased or sold at this market in a single trade for this good. Trade volume also gives an indication of price volatility. A market with a low trade volume will have large price swings, while high trade volume will be more resilient to price changes."""
     symbol: str
     sellPrice: int
     purchasePrice: int
-    supply: MarketTradeGoodSupply
+    supply: SupplyLevel
+    activity: Optional[ActivityLevel]
 
 
 @dataclass
@@ -428,9 +444,7 @@ class ConnectedSystem:
 
 @dataclass
 class JumpGate:
-    connectedSystems: list[ConnectedSystem]
-    jumpRange: int
-    factionSymbol: Optional[str]
+    connections: list[str]
 
 
 @dataclass
@@ -505,6 +519,33 @@ class ScannedSystem:
     y: int
     type: SystemType
     distance: int
+
+
+@dataclass
+class ConstructionMaterial:
+    tradeSymbol: TradeSymbol
+    required: int
+    fulfilled: int
+
+
+@dataclass
+class Construction:
+    symbol: str
+    materials: list[ConstructionMaterial]
+    isComplete: bool
+
+@dataclass
+class SiphonYield:
+    symbol:TradeSymbol
+    """Symbol of the good that was siphoned."""
+    units:int
+    """The number of units siphoned that were placed into the ship's cargo hold."""
+@dataclass
+class Siphon:
+    shipSymbol: str
+    """Symbol of the ship that executed the siphon."""
+    yield_: SiphonYield
+    """Yields from the siphon operation."""
 
 
 class ScannedWaypoint(Waypoint):

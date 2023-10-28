@@ -101,3 +101,8 @@ Completed Objects:
 - Waypoint
 
 
+~~~py
+poetry add [-dev] <dependency>
+poetry install
+poetry build
+~~~

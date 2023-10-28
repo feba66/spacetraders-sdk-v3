@@ -13,8 +13,8 @@ class SpaceTradersSDK:
     faction: Faction
     ships: dict[str, Ship] = {}
 
-    def __init__(self, token=None) -> None:
-        self.api = SpaceTradersApi()
+    def __init__(self, url="https://api.spacetraders.io/v2", token=None) -> None:
+        self.api = SpaceTradersApi(url=url)
         if token:
             self.api.Login(token)
         self.dacite_conf = Config(cast=[FactionSymbol, ContractType, Deposits, ErrorCodes, FactionTraitSymbol, MarketTradeGoodSupply, MarketTransactionType, Produce, ShipCrewRotation, ShipEngineType,
@@ -57,12 +57,8 @@ class SpaceTradersSDK:
                 return agent
         return r
 
-    def navigate(self, ship: Ship | str, waypoint: str):
-        r: Response = self.api.navigate(ship if isinstance(ship, str) else ship.symbol, waypoint)
-        # wip
-        return r
-
-    def get_waypoints(self, system_symbol: str, page=1, limit=20):
+    # region system
+    def get_waypoints(self, system_symbol: str, page=1, limit=20) -> tuple[list[Waypoint], Meta] | Response:
         r: Response = self.api.get_waypoints(system_symbol, page, limit)
         if r.status_code == 200:
             data = r.json()
@@ -78,8 +74,10 @@ class SpaceTradersSDK:
                     waypoints.append(waypoint)
                 return waypoints, meta
         return r
+    # endregion system
 
-    def get_ships(self, page=1, limit=20):
+    # region ships
+    def get_ships(self, page=1, limit=20) -> Response | tuple[list[Ship], Meta]:
         r: Response = self.api.get_ships(page, limit)
         if r.status_code == 200:
             data = r.json()
@@ -95,3 +93,39 @@ class SpaceTradersSDK:
                     ships.append(ship)
                 return ships, meta
         return r
+    
+    def navigate(self, ship: Ship | str, waypoint: str):
+        r: Response = self.api.navigate(ship if isinstance(ship, str) else ship.symbol, waypoint)
+        # wip
+        return r
+    # endregion ships
+
+    # region contracts
+    def get_contracts(self, page=1, limit=20) -> Response | tuple[list[Contract], Meta]:
+        r: Response = self.api.get_contracts(page, limit)
+        if r.status_code == 200:
+            data = r.json()
+            if "meta" in data:
+                meta = from_dict(Meta, data["meta"], self.dacite_conf)
+            else:
+                meta = None
+            if "data" in data:
+                data = data["data"]
+                contracts = []
+                for con in data:
+                    contract = from_dict(Contract, con, self.dacite_conf)
+                    contracts.append(contract)
+                return contracts, meta
+        return r
+
+    def accept_contract(self, contract_id: str) -> Response | tuple[Contract, Agent]:
+        r: Response = self.api.accept_contract(contract_id)
+        if r.status_code == 200:
+            data = r.json()
+            data = data["data"]
+            agent = from_dict(Agent, data["agent"], self.dacite_conf)
+            contract = from_dict(Contract, data["contract"], self.dacite_conf)
+
+            return contract, agent
+        return r
+    # endregion contracts
