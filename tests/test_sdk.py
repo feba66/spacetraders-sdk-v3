@@ -49,6 +49,12 @@ def test_status():
     sdk = SpaceTradersSDK(os.getenv("SERVERURL"))
     print(sdk.api.status().json())
 
+def resulter(r):
+    pprint(r)
+    try:
+        print(r.json())
+    except:
+        pass
 
 if __name__ == "__main__":
     # test_register()
@@ -62,18 +68,13 @@ if __name__ == "__main__":
     # a = sdk.get_my_agent()
     # r = sdk.get_waypoints(a.headquarters.rsplit("-",1)[0],type=WaypointType.JUMP_GATE)
     # r = sdk.api.get_construction("X1-JN57-I55")
-    r = sdk.get_contracts()
-
-    pprint(r)
-    try:
-        print(r.json())
-    except:
-        pass
+    # r = sdk.get_contracts()
     # r = sdk.get_waypoints("X1-CP67", traits=[WaypointTraitSymbols.COMMON_METAL_DEPOSITS, WaypointTraitSymbols.STRIPPED])
-    r = sdk.accept_contract(r[0][0].id)
+    # r = sdk.accept_contract(r[0][0].id)
+    
+    ships,m = sdk.get_ships()
+    
+    market = sdk.get_market(ships[0].nav.waypointSymbol)
+    
+    pprint(market)
 
-    pprint(r)
-    try:
-        print(r.json())
-    except:
-        pass
