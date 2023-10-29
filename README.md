@@ -29,11 +29,11 @@ Class          | HTTP request  | Description   | Implemented
 |              | **get** /     | Status        | api
 |              | **post** /register | Register New Agent | api & sdk
 | *Agents*     | **get** /my/agent | Fetch your agent's details. | api & sdk
-| *Agents*     | **get** /agents | List all Agents. | api
-| *Agents*     | **get** /agents/{agent_symbol} | Get Agent. | api
-| *Contracts*  | **get** /my/contracts | List all of your contracts. | api
+| *Agents*     | **get** /agents | List all Agents. | api & sdk
+| *Agents*     | **get** /agents/{agent_symbol} | Get Agent. | api & sdk
+| *Contracts*  | **get** /my/contracts | List all of your contracts. | api & sdk
 | *Contracts*  | **get** /my/contracts/{contractId} | Get the details of a contract by ID. | api
-| *Contracts*  | **post** /my/contracts/{contractId}/accept | Accept a contract. | api
+| *Contracts*  | **post** /my/contracts/{contractId}/accept | Accept a contract. | api & sdk
 | *Contracts*  | **post** /my/contracts/{contractId}/deliver | Deliver cargo on a given contract. |  api
 | *Contracts*  | **post** /my/contracts/{contractId}/fulfill | Fulfill a contract | api
 | *Factions*   | **get** /factions | List all discovered factions in the game. |  api
@@ -81,7 +81,7 @@ Class          | HTTP request  | Description   | Implemented
 
 
 api: 52/52
-
+sdk 8/52
 
 Completed Objects:
 - Agent

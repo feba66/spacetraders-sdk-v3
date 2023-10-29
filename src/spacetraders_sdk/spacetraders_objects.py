@@ -38,7 +38,7 @@ class Meta:
 
 @dataclass
 class Agent:
-    accountId: str
+    accountId: Optional[str]
     symbol: str
     headquarters: str
     credits: int
@@ -334,7 +334,7 @@ class Waypoint:
     """Relative position of the waypoint on the system's y axis. This is not an absolute position in the universe."""
     type: WaypointType
     orbitals: list[WaypointOrbital]
-    modifiers:Optional[WaypointModifier]
+    modifiers:Optional[list[WaypointModifier]]
     isUnderConstruction:bool
     orbits: Optional[str]
     """The symbol of the parent waypoint, if this waypoint is in orbit around another waypoint. Otherwise this value is undefined."""

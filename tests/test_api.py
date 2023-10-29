@@ -36,6 +36,3 @@ def test_waypoints2():
     pprint(waypoints.json())
     assert waypoints != None
     assert waypoints.text != None
-
-
-test_waypoints()

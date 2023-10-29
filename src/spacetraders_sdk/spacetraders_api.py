@@ -7,7 +7,7 @@ import logging
 import requests
 import json
 import os
-from spacetraders_sdk.spacetraders_enums import FactionSymbol, Produce, ShipNavFlightMode, TradeSymbol, WaypointType
+from spacetraders_sdk.spacetraders_enums import FactionSymbol, Produce, ShipNavFlightMode, TradeSymbol, WaypointTraitSymbols, WaypointType
 from spacetraders_sdk.ratelimit import BurstyLimiter, Limiter
 from spacetraders_sdk.spacetraders_helper import system_symbol_from_waypoint_symbol
 from spacetraders_sdk.spacetraders_logger import SpaceTradersLogger
@@ -144,13 +144,17 @@ class SpaceTradersApi:
         r = self.my_req(path, "get")
         return r
 
-    def get_waypoints(self, system_symbol: str, page=1, limit=20, type: WaypointType = None, traits: WaypointTrait | list[WaypointTrait] = None):
+    def get_waypoints(self, system_symbol: str, page=1, limit=20, type: WaypointType = None, traits: WaypointTraitSymbols | list[WaypointTraitSymbols] = None):
         path = f"/systems/{system_symbol}/waypoints"
         path += f"?page={page}&limit={limit}"
         if type:
             path += f"&type={type}"
         if traits:
-            path += f"&traits={traits}"
+            if isinstance(traits, list):
+                for t in traits:
+                    path += f"&traits={t}"
+            else:
+                path += f"&traits={t}"
         r = self.my_req(path, "get")
         return r
 
@@ -185,7 +189,7 @@ class SpaceTradersApi:
         r = self.my_req(path, "get")
         return r
 
-    def get_construction(self, waypoint_symbol: str, ship_symbol: str | Ship, trade_symbol: str | TradeSymbol, units: int):
+    def supply_construction(self, waypoint_symbol: str, ship_symbol: str | Ship, trade_symbol: str | TradeSymbol, units: int):
         """Supply a construction site with the specified good. Requires a waypoint with a property of `isUnderConstruction` to be true.\n\nThe good must be in your ship's cargo. The good will be removed from your ship's cargo and added to the construction site's materials."""
         system_symbol = system_symbol_from_waypoint_symbol(waypoint_symbol)
         path = f"/systems/{system_symbol}/waypoints/{waypoint_symbol}/construction/supply"
