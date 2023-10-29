@@ -49,6 +49,8 @@ Class          | HTTP request  | Description   | Implemented
 | *Fleet*      | **post** /my/ships/{shipSymbol}/dock | Dock Ship |  api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/survey | Create Survey | api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/extract | Extract Resources |  api
+| *Fleet*      | **post** /my/ships/{shipSymbol}/extract/survey | Extract Resources with Survey |  api
+| *Fleet*      | **post** /my/ships/{shipSymbol}/siphon | Siphon Resources | api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/jettison | Jettison Cargo | api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/jump | Jump Ship |  api
 | *Fleet*      | **post** /my/ships/{shipSymbol}/navigate | Navigate Ship |  api
@@ -74,9 +76,11 @@ Class          | HTTP request  | Description   | Implemented
 | *Systems*    | **get** /systems/{systemSymbol}/waypoints/{waypointSymbol}/market | Get Market |  api
 | *Systems*    | **get** /systems/{systemSymbol}/waypoints/{waypointSymbol}/shipyard | Get Shipyard |  api
 | *Systems*    | **get** /systems/{systemSymbol}/waypoints/{waypointSymbol}/jump-gate | Get Jump Gate | api
+| *Systems*    | **get** /systems/{systemSymbol}/waypoints/{waypointSymbol}/construction | Get Construction Site | api
+| *Systems*    | **post** /systems/{systemSymbol}/waypoints/{waypointSymbol}/construction/supply | Supply Construction Site | api
 
 
-api: 48/48
+api: 52/52
 
 
 Completed Objects:
