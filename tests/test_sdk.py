@@ -49,6 +49,7 @@ def test_status():
     sdk = SpaceTradersSDK(os.getenv("SERVERURL"))
     print(sdk.api.status().json())
 
+
 def resulter(r):
     pprint(r)
     try:
@@ -56,9 +57,10 @@ def resulter(r):
     except:
         pass
 
+
 if __name__ == "__main__":
-    # test_register()
-    # exit()
+    test_register()
+    exit()
     load_dotenv(find_dotenv(".env"))
     sdk = SpaceTradersSDK(os.getenv("SERVERURL"))
     sdk.Login(os.getenv("TOKEN"))
@@ -71,10 +73,9 @@ if __name__ == "__main__":
     # r = sdk.get_contracts()
     # r = sdk.get_waypoints("X1-CP67", traits=[WaypointTraitSymbols.COMMON_METAL_DEPOSITS, WaypointTraitSymbols.STRIPPED])
     # r = sdk.accept_contract(r[0][0].id)
-    
-    ships,m = sdk.get_ships()
-    
-    market = sdk.get_market(ships[0].nav.waypointSymbol)
-    
-    pprint(market)
 
+    ships, m = sdk.get_ships()
+
+    market = sdk.get_market(ships[0].nav.waypointSymbol)
+
+    pprint(market)

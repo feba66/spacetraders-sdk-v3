@@ -1,8 +1,9 @@
-from dacite import from_dict, Config
+from dacite import Config, from_dict
 from requests import Response
 from spacetraders_sdk.spacetraders_api import SpaceTradersApi
 from spacetraders_sdk.spacetraders_enums import FactionSymbol, ContractType, MarketTradeGoodType, WaypointModifierType, Deposits, ErrorCodes, FactionTraitSymbol, SupplyLevel, ActivityLevel, MarketTransactionType, Produce, ShipCrewRotation, ShipEngineType, ShipFrameType, ShipModuleType, ShipMountType, ShipNavFlightMode, ShipNavStatus, ShipReactorType, ShipRole, ShipType, SurveySize, SystemType, TradeSymbol, WaypointTraitSymbols, WaypointType
 from spacetraders_sdk.spacetraders_objects import Agent, Construction, Contract, Cooldown, Extraction, Faction, JumpGate, Market, MarketTransaction, Meta, Ship, ShipCargo, ShipFuel, ShipNav, Shipyard, Siphon, Waypoint, WaypointTrait
+from spacetraders_sdk.spacetraders_helper import rename_yield_key
 
 
 class SpaceTradersSDK:
@@ -22,13 +23,13 @@ class SpaceTradersSDK:
         if token:
             self.api.Login(token)
         self.dacite_conf = Config(cast=[FactionSymbol, ContractType, Deposits, ErrorCodes, FactionTraitSymbol, SupplyLevel, ActivityLevel, MarketTransactionType, Produce, ShipCrewRotation, ShipEngineType,
-                                  ShipFrameType,MarketTradeGoodType, WaypointModifierType, ShipModuleType, ShipMountType, ShipNavFlightMode, ShipNavStatus, ShipReactorType, ShipRole, ShipType, SurveySize, SystemType, TradeSymbol, WaypointTraitSymbols, WaypointType])
+                                  ShipFrameType, MarketTradeGoodType, WaypointModifierType, ShipModuleType, ShipMountType, ShipNavFlightMode, ShipNavStatus, ShipReactorType, ShipRole, ShipType, SurveySize, SystemType, TradeSymbol, WaypointTraitSymbols, WaypointType])
 
     def Login(self, token):
         self.api.Login(token)
 
     def conv(self, cls, obj):
-        return from_dict(cls, obj, self.dacite_conf)
+        return from_dict(cls, rename_yield_key(obj), self.dacite_conf)
 
     # region Agents
     def register(self, symbol: str, factionSymbol: FactionSymbol, email: str = None):
@@ -116,6 +117,7 @@ class SpaceTradersSDK:
                 self.markets[waypoint_symbol] = market
                 return market
         return r
+
     def get_shipyard(self, waypoint_symbol: str):
         r: Response = self.api.get_shipyard(waypoint_symbol)
         if r.status_code == 200:
