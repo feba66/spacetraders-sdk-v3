@@ -1,4 +1,4 @@
-from dacite import from_dict, Config
+from dacite import Config, from_dict
 from requests import Response
 from spacetraders_sdk.spacetraders_api import SpaceTradersApi
 from spacetraders_sdk.spacetraders_enums import (
@@ -98,7 +98,7 @@ class SpaceTradersSDK:
         )
 
     def conv(self, cls, obj):
-        return from_dict(cls, obj, self.dacite_conf)
+        return from_dict(cls, rename_yield_key(obj), self.dacite_conf)
 
     # region Account
     def Login(self, token):

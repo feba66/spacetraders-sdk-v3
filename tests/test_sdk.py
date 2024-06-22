@@ -85,8 +85,8 @@ def dist2(a, b):
 
 
 if __name__ == "__main__":
-    # test_register()
-    # exit()
+    test_register()
+    exit()
     load_dotenv(find_dotenv(".env"))
     sdk = SpaceTradersSDK(os.getenv("SERVERURL"))
     sdk.Login(os.getenv("TOKEN"))

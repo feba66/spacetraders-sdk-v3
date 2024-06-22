@@ -5,7 +5,7 @@ from spacetraders_sdk.spacetraders_objects import Cooldown, ShipNav
 
 
 def system_symbol_from_waypoint_symbol(waypoint_symbol):
-    return waypoint_symbol[:waypoint_symbol.rfind("-")]
+    return waypoint_symbol[: waypoint_symbol.rfind("-")]
 
 
 def parse_time(tstr: str):
