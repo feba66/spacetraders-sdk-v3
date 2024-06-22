@@ -1,8 +1,53 @@
 from dacite import from_dict, Config
 from requests import Response
 from spacetraders_sdk.spacetraders_api import SpaceTradersApi
-from spacetraders_sdk.spacetraders_enums import FactionSymbol, ContractType, MarketTradeGoodType, WaypointModifierType, Deposits, ErrorCodes, FactionTraitSymbol, SupplyLevel, ActivityLevel, MarketTransactionType, Produce, ShipCrewRotation, ShipEngineType, ShipFrameType, ShipModuleType, ShipMountType, ShipNavFlightMode, ShipNavStatus, ShipReactorType, ShipRole, ShipType, SurveySize, SystemType, TradeSymbol, WaypointTraitSymbols, WaypointType
-from spacetraders_sdk.spacetraders_objects import Agent, Construction, Contract, Cooldown, Extraction, Faction, JumpGate, Market, MarketTransaction, Meta, Ship, ShipCargo, ShipFuel, ShipNav, Shipyard, Siphon, Waypoint, WaypointTrait
+from spacetraders_sdk.spacetraders_enums import (
+    FactionSymbol,
+    ContractType,
+    MarketTradeGoodType,
+    WaypointModifierType,
+    Deposits,
+    ErrorCodes,
+    FactionTraitSymbol,
+    SupplyLevel,
+    ActivityLevel,
+    MarketTransactionType,
+    Produce,
+    ShipCrewRotation,
+    ShipEngineType,
+    ShipFrameType,
+    ShipModuleType,
+    ShipMountType,
+    ShipNavFlightMode,
+    ShipNavStatus,
+    ShipReactorType,
+    ShipRole,
+    ShipType,
+    SurveySize,
+    SystemType,
+    TradeSymbol,
+    WaypointTraitSymbols,
+    WaypointType,
+)
+from spacetraders_sdk.spacetraders_objects import (
+    Agent,
+    Construction,
+    Contract,
+    Cooldown,
+    Extraction,
+    Faction,
+    JumpGate,
+    Market,
+    MarketTransaction,
+    Meta,
+    Ship,
+    ShipCargo,
+    ShipFuel,
+    ShipNav,
+    Shipyard,
+    Siphon,
+    Waypoint,
+)
 
 
 class SpaceTradersSDK:
@@ -21,16 +66,44 @@ class SpaceTradersSDK:
         self.api = SpaceTradersApi(url=url)
         if token:
             self.api.Login(token)
-        self.dacite_conf = Config(cast=[FactionSymbol, ContractType, Deposits, ErrorCodes, FactionTraitSymbol, SupplyLevel, ActivityLevel, MarketTransactionType, Produce, ShipCrewRotation, ShipEngineType,
-                                  ShipFrameType,MarketTradeGoodType, WaypointModifierType, ShipModuleType, ShipMountType, ShipNavFlightMode, ShipNavStatus, ShipReactorType, ShipRole, ShipType, SurveySize, SystemType, TradeSymbol, WaypointTraitSymbols, WaypointType])
-
-    def Login(self, token):
-        self.api.Login(token)
+        self.dacite_conf = Config(
+            cast=[
+                FactionSymbol,
+                ContractType,
+                Deposits,
+                ErrorCodes,
+                FactionTraitSymbol,
+                SupplyLevel,
+                ActivityLevel,
+                MarketTransactionType,
+                Produce,
+                ShipCrewRotation,
+                ShipEngineType,
+                ShipFrameType,
+                MarketTradeGoodType,
+                WaypointModifierType,
+                ShipModuleType,
+                ShipMountType,
+                ShipNavFlightMode,
+                ShipNavStatus,
+                ShipReactorType,
+                ShipRole,
+                ShipType,
+                SurveySize,
+                SystemType,
+                TradeSymbol,
+                WaypointTraitSymbols,
+                WaypointType,
+            ]
+        )
 
     def conv(self, cls, obj):
         return from_dict(cls, obj, self.dacite_conf)
 
-    # region Agents
+    # region Account
+    def Login(self, token):
+        self.api.Login(token)
+
     def register(self, symbol: str, factionSymbol: FactionSymbol, email: str = None):
         r: Response = self.api.register(symbol, factionSymbol, email)
 
@@ -52,6 +125,9 @@ class SpaceTradersSDK:
 
                 return token, agent, contract, faction, ship
         return r
+
+    # endregion Account
+    # region Agents
 
     def get_my_agent(self):
         r = self.api.get_my_agent()
@@ -86,10 +162,18 @@ class SpaceTradersSDK:
                 agent = self.conv(Agent, data)
                 return agent
         return r
+
     # endregion Agents
     # region system
 
-    def get_waypoints(self, system_symbol: str, page=1, limit=20, type: WaypointType = None, traits: WaypointTraitSymbols | list[WaypointTraitSymbols] = None) -> tuple[list[Waypoint], Meta] | Response:
+    def get_waypoints(
+        self,
+        system_symbol: str,
+        page=1,
+        limit=20,
+        type: WaypointType = None,
+        traits: WaypointTraitSymbols | list[WaypointTraitSymbols] = None,
+    ) -> tuple[list[Waypoint], Meta] | Response:
         r: Response = self.api.get_waypoints(system_symbol, page, limit, type, traits)
         if r.status_code == 200:
             data = r.json()
@@ -106,24 +190,45 @@ class SpaceTradersSDK:
                 return waypoints, meta
         return r
 
-    def get_market(self, waypoint_symbol: str):
-        r: Response = self.api.get_market(waypoint_symbol)
+    def get_market(self, waypoint_symbol: str | Waypoint):
+        r: Response = self.api.get_market(
+            waypoint_symbol
+            if isinstance(waypoint_symbol, str)
+            else waypoint_symbol.symbol
+        )
         if r.status_code == 200:
             data = r.json()
             if "data" in data:
                 data = data["data"]
                 market = self.conv(Market, data)
-                self.markets[waypoint_symbol] = market
+                self.markets[
+                    (
+                        waypoint_symbol
+                        if isinstance(waypoint_symbol, str)
+                        else waypoint_symbol.symbol
+                    )
+                ] = market
                 return market
         return r
-    def get_shipyard(self, waypoint_symbol: str):
-        r: Response = self.api.get_shipyard(waypoint_symbol)
+
+    def get_shipyard(self, waypoint_symbol: str | Waypoint):
+        r: Response = self.api.get_shipyard(
+            waypoint_symbol
+            if isinstance(waypoint_symbol, str)
+            else waypoint_symbol.symbol
+        )
         if r.status_code == 200:
             data = r.json()
             if "data" in data:
                 data = data["data"]
                 shipyard = self.conv(Shipyard, data)
-                self.shipyards[waypoint_symbol] = shipyard
+                self.shipyards[
+                    (
+                        waypoint_symbol
+                        if isinstance(waypoint_symbol, str)
+                        else waypoint_symbol.symbol
+                    )
+                ] = shipyard
                 return shipyard
         return r
 
@@ -149,19 +254,25 @@ class SpaceTradersSDK:
                 self.constructions[waypoint_symbol] = construction
                 return construction
         return r
+
     # endregion system
     # region Contracts
 
-    def get_contracts(self, page=1, limit=20):
-        r = self.api.get_contracts(page, limit)
-
+    def get_contracts(self, page=1, limit=20) -> Response | tuple[list[Contract], Meta]:
+        r: Response = self.api.get_contracts(page, limit)
         if r.status_code == 200:
             data = r.json()
+            if "meta" in data:
+                meta = self.conv(Meta, data["meta"])
+            else:
+                meta = None
             if "data" in data:
-                contracts = [self.conv(Contract, d) for d in data["data"]]
-                for c in contracts:
-                    self.contracts[c.id] = c
-                return contracts
+                data = data["data"]
+                contracts = []
+                for con in data:
+                    contract = self.conv(Contract, con)
+                    contracts.append(contract)
+                return contracts, meta
         return r
 
     def get_contract(self, contract_id: str):
@@ -188,9 +299,19 @@ class SpaceTradersSDK:
                 return c, agent
         return r
 
-    def deliver_contract(self, contract_id: str, ship_symbol: str, trade_symbol: str, units: int):
+    def deliver_contract(
+        self, contract_id: str, ship_symbol: str, trade_symbol: str, units: int
+    ):
         path = f"/my/contracts/{contract_id}/deliver"
-        r = self.my_req(path, "post", data={"shipSymbol": ship_symbol, "tradeSymbol": trade_symbol, "units": units})
+        r = self.my_req(
+            path,
+            "post",
+            data={
+                "shipSymbol": ship_symbol,
+                "tradeSymbol": trade_symbol,
+                "units": units,
+            },
+        )
         return r
 
     def fulfill_contract(self, contract_id: str):
@@ -214,6 +335,7 @@ class SpaceTradersSDK:
                 for s in data:
                     ship = self.conv(Ship, s)
                     ships.append(ship)
+                    self.ships[ship.symbol] = ship
                 return ships, meta
         return r
 
@@ -229,7 +351,9 @@ class SpaceTradersSDK:
         return r
 
     def navigate(self, ship: Ship | str, waypoint: str):
-        r: Response = self.api.navigate(ship if isinstance(ship, str) else ship.symbol, waypoint)
+        r: Response = self.api.navigate(
+            ship if isinstance(ship, str) else ship.symbol, waypoint
+        )
         if r.status_code == 200:
             data = r.json()
             if "data" in data:
@@ -241,18 +365,20 @@ class SpaceTradersSDK:
                 return fuel, nav
         return r
 
-    def orbit(self,  ship: Ship | str):
-        r: Response = self.api.orbit(ship if isinstance(ship, str) else ship.symbol)
+    def orbit(self, ship: Ship | str):
+        ship_symbol = ship if isinstance(ship, str) else ship.symbol
+        r: Response = self.api.orbit(ship_symbol)
         if r.status_code == 200:
             data = r.json()
             if "data" in data:
                 data = data["data"]
                 nav = self.conv(ShipNav, data["nav"])
-                self.ships[ship if isinstance(ship, str) else ship.symbol].nav = nav
+                if ship_symbol in self.ships:
+                    self.ships[ship_symbol].nav = nav
                 return nav
         return r
 
-    def dock(self,  ship: Ship | str):
+    def dock(self, ship: Ship | str):
         r: Response = self.api.dock(ship if isinstance(ship, str) else ship.symbol)
         if r.status_code == 200:
             data = r.json()
@@ -264,7 +390,9 @@ class SpaceTradersSDK:
         return r
 
     def refuel(self, ship: Ship | str, fuel_units: int):
-        r: Response = self.api.refuel(ship if isinstance(ship, str) else ship.symbol, fuel_units)
+        r: Response = self.api.refuel(
+            ship if isinstance(ship, str) else ship.symbol, fuel_units
+        )
         if r.status_code == 200:
             data = r.json()
             if "data" in data:
@@ -278,7 +406,9 @@ class SpaceTradersSDK:
         return r
 
     def sell(self, ship: Ship | str, symbol: str, units: int):
-        r: Response = self.api.sell(ship if isinstance(ship, str) else ship.symbol, symbol, units)
+        r: Response = self.api.sell(
+            ship if isinstance(ship, str) else ship.symbol, symbol, units
+        )
         if r.status_code == 200:
             data = r.json()
             if "data" in data:
@@ -292,7 +422,9 @@ class SpaceTradersSDK:
         return r
 
     def purchase(self, ship: Ship | str, symbol: str, units: int):
-        r: Response = self.api.purchase(ship if isinstance(ship, str) else ship.symbol, symbol, units)
+        r: Response = self.api.purchase(
+            ship if isinstance(ship, str) else ship.symbol, symbol, units
+        )
         if r.status_code == 200:
             data = r.json()
             if "data" in data:
@@ -315,12 +447,16 @@ class SpaceTradersSDK:
                 extraction = self.conv(Extraction, data["extraction"])
                 cargo = self.conv(ShipCargo, data["cargo"])
                 self.ships[ship if isinstance(ship, str) else ship.symbol].cargo = cargo
-                self.ships[ship if isinstance(ship, str) else ship.symbol].cooldown = cooldown
+                self.ships[ship if isinstance(ship, str) else ship.symbol].cooldown = (
+                    cooldown
+                )
                 return cooldown, extraction, cargo
         return r
 
     def extract_with_survey(self, ship: Ship | str, survey: dict):
-        r: Response = self.api.extract_with_survey(ship if isinstance(ship, str) else ship.symbol, survey)
+        r: Response = self.api.extract_with_survey(
+            ship if isinstance(ship, str) else ship.symbol, survey
+        )
         if r.status_code == 201:
             data = r.json()
             if "data" in data:
@@ -329,7 +465,9 @@ class SpaceTradersSDK:
                 extraction = self.conv(Extraction, data["extraction"])
                 cargo = self.conv(ShipCargo, data["cargo"])
                 self.ships[ship if isinstance(ship, str) else ship.symbol].cargo = cargo
-                self.ships[ship if isinstance(ship, str) else ship.symbol].cooldown = cooldown
+                self.ships[ship if isinstance(ship, str) else ship.symbol].cooldown = (
+                    cooldown
+                )
                 return cooldown, extraction, cargo
         return r
 
@@ -343,37 +481,10 @@ class SpaceTradersSDK:
                 siphon = self.conv(Siphon, data["siphon"])
                 cargo = self.conv(ShipCargo, data["cargo"])
                 self.ships[ship if isinstance(ship, str) else ship.symbol].cargo = cargo
-                self.ships[ship if isinstance(ship, str) else ship.symbol].cooldown = cooldown
+                self.ships[ship if isinstance(ship, str) else ship.symbol].cooldown = (
+                    cooldown
+                )
                 return cooldown, siphon, cargo
         return r
+
     # endregion ships
-
-    # region contracts
-    def get_contracts(self, page=1, limit=20) -> Response | tuple[list[Contract], Meta]:
-        r: Response = self.api.get_contracts(page, limit)
-        if r.status_code == 200:
-            data = r.json()
-            if "meta" in data:
-                meta = self.conv(Meta, data["meta"])
-            else:
-                meta = None
-            if "data" in data:
-                data = data["data"]
-                contracts = []
-                for con in data:
-                    contract = self.conv(Contract, con)
-                    contracts.append(contract)
-                return contracts, meta
-        return r
-
-    def accept_contract(self, contract_id: str) -> Response | tuple[Contract, Agent]:
-        r: Response = self.api.accept_contract(contract_id)
-        if r.status_code == 200:
-            data = r.json()
-            data = data["data"]
-            agent = self.conv(Agent, data["agent"])
-            contract = self.conv(Contract, data["contract"])
-
-            return contract, agent
-        return r
-    # endregion contracts

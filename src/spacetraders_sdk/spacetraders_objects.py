@@ -320,9 +320,11 @@ class Chart:
 
 @dataclass
 class WaypointModifier:
-    symbol:WaypointModifierType
-    name:str
-    description:str
+    symbol: WaypointModifierType
+    name: str
+    description: str
+
+
 @dataclass
 class Waypoint:
     symbol: str
@@ -334,8 +336,8 @@ class Waypoint:
     """Relative position of the waypoint on the system's y axis. This is not an absolute position in the universe."""
     type: WaypointType
     orbitals: list[WaypointOrbital]
-    modifiers:Optional[list[WaypointModifier]]
-    isUnderConstruction:bool
+    modifiers: Optional[list[WaypointModifier]]
+    isUnderConstruction: bool
     orbits: Optional[str]
     """The symbol of the parent waypoint, if this waypoint is in orbit around another waypoint. Otherwise this value is undefined."""
     faction: Optional[WaypointFaction]
@@ -374,13 +376,19 @@ class ShipyardShip:
 
 
 @dataclass
+class ShipTypeWrapper:
+    type: ShipType
+
+
+@dataclass
 class Shipyard:
-    shipTypes: list[ShipType]
+    shipTypes: list[ShipTypeWrapper]
     symbol: str
     transactions: Optional[list[ShipyardTransaction]]
     ships: Optional[list[ShipyardShip]]
     modificationsFee: int
-    """The fee to modify a ship at this shipyard. This includes installing or removing modules and mounts on a ship. In the case of mounts, the fee is a flat rate per mount. In the case of modules, the fee is per slot the module occupies."""
+    """The fee to modify a ship at this shipyard. This includes installing or removing modules and mounts on a ship.
+    In the case of mounts, the fee is a flat rate per mount. In the case of modules, the fee is per slot the module occupies."""
 
 
 @dataclass
@@ -413,7 +421,9 @@ class MarketTradeGood:
     type: MarketTradeGoodType
     """The type of trade good (export, import, or exchange)."""
     tradeVolume: int
-    """This is the maximum number of units that can be purchased or sold at this market in a single trade for this good. Trade volume also gives an indication of price volatility. A market with a low trade volume will have large price swings, while high trade volume will be more resilient to price changes."""
+    """This is the maximum number of units that can be purchased or sold at this market in a single trade for this good.
+    Trade volume also gives an indication of price volatility.
+    A market with a low trade volume will have large price swings, while high trade volume will be more resilient to price changes."""
     symbol: str
     sellPrice: int
     purchasePrice: int
@@ -534,12 +544,15 @@ class Construction:
     materials: list[ConstructionMaterial]
     isComplete: bool
 
+
 @dataclass
 class SiphonYield:
-    symbol:TradeSymbol
+    symbol: TradeSymbol
     """Symbol of the good that was siphoned."""
-    units:int
+    units: int
     """The number of units siphoned that were placed into the ship's cargo hold."""
+
+
 @dataclass
 class Siphon:
     shipSymbol: str

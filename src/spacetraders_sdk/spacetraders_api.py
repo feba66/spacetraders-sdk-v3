@@ -1,17 +1,22 @@
 from http.client import RemoteDisconnected
 from urllib3.exceptions import ProtocolError
 from requests.exceptions import ConnectionError
-import threading
 import time
-import logging
 import requests
 import json
 import os
-from spacetraders_sdk.spacetraders_enums import FactionSymbol, Produce, ShipNavFlightMode, TradeSymbol, WaypointTraitSymbols, WaypointType
+from spacetraders_sdk.spacetraders_enums import (
+    FactionSymbol,
+    Produce,
+    ShipNavFlightMode,
+    TradeSymbol,
+    WaypointTraitSymbols,
+    WaypointType,
+)
 from spacetraders_sdk.ratelimit import BurstyLimiter, Limiter
 from spacetraders_sdk.spacetraders_helper import system_symbol_from_waypoint_symbol
 from spacetraders_sdk.spacetraders_logger import SpaceTradersLogger
-from spacetraders_sdk.spacetraders_objects import Ship, WaypointTrait
+from spacetraders_sdk.spacetraders_objects import Ship
 
 
 class SpaceTradersApi:
@@ -25,7 +30,9 @@ class SpaceTradersApi:
     token: str
     # endregion
 
-    def __init__(self, url="https://api.spacetraders.io/v2", name="ST", log=True) -> None:
+    def __init__(
+        self, url="https://api.spacetraders.io/v2", name="ST", log=True
+    ) -> None:
         # region inits
         self.name = name
         self.server_url = url
@@ -40,18 +47,23 @@ class SpaceTradersApi:
         # endregion
 
     @BurstyLimiter(Limiter(2, 1.05), Limiter(10, 10.5))
+    # @BurstyLimiter(Limiter(50, 1.05), Limiter(500, 10.5))
     def req_and_log(self, url: str, method: str, data=None, json=None):
         r = self.session.request(method, self.server_url + url, data=data, json=json)
         if self.log:
             self.logger.info(f"{r.request.method} {r.request.url} {r.status_code}")
-            self.logger.debug(f"{r.request.method} {r.request.url} {r.status_code} {r.text}")
+            self.logger.debug(
+                f"{r.request.method} {r.request.url} {r.status_code} {r.text}"
+            )
         return r
 
     def req_and_log_nolimit(self, url: str, method: str, data=None, json=None):
         r = self.session.request(method, self.server_url + url, data=data, json=json)
         if self.log:
             self.logger.info(f"{r.request.method} {r.request.url} {r.status_code}")
-            self.logger.debug(f"{r.request.method} {r.request.url} {r.status_code} {r.text}")
+            self.logger.debug(
+                f"{r.request.method} {r.request.url} {r.status_code} {r.text}"
+            )
         return r
 
     def my_req(self, url, method, data=None, json=None):
@@ -72,7 +84,7 @@ class SpaceTradersApi:
     def reset_connection(self):
         time.sleep(5)
         self.session = requests.session()
-        if self.token != None:
+        if self.token is not None:
             self.Login(self.token)
 
     def Login(self, token):
@@ -80,7 +92,9 @@ class SpaceTradersApi:
         self.session.headers.update({"Authorization": "Bearer " + token})
 
     # region Endpoints
-    def register(self, symbol: str, faction: FactionSymbol, email: str = None, login=True):
+    def register(
+        self, symbol: str, faction: FactionSymbol, email: str = None, login=True
+    ):
         path = "/register"
         if 3 > len(symbol) > 14:
             raise ValueError("symbol must be 3-14 characters long")
@@ -109,7 +123,7 @@ class SpaceTradersApi:
         return r
 
     def get_agents(self, page=1, limit=20):
-        path = f"/agents"
+        path = "/agents"
         r = self.my_req(path + f"?page={page}&limit={limit}", "get")
         return r
 
@@ -117,11 +131,12 @@ class SpaceTradersApi:
         path = f"/agents/{agent_symbol}"
         r = self.my_req(path, "get")
         return r
+
     # endregion Agents
     # region Systems
 
     def get_systems(self, page=1, limit=20):
-        path = f"/systems"
+        path = "/systems"
         r = self.my_req(path + f"?page={page}&limit={limit}", "get")
         return r
 
@@ -144,7 +159,14 @@ class SpaceTradersApi:
         r = self.my_req(path, "get")
         return r
 
-    def get_waypoints(self, system_symbol: str, page=1, limit=20, type: WaypointType = None, traits: WaypointTraitSymbols | list[WaypointTraitSymbols] = None):
+    def get_waypoints(
+        self,
+        system_symbol: str,
+        page=1,
+        limit=20,
+        type: WaypointType = None,
+        traits: WaypointTraitSymbols | list[WaypointTraitSymbols] = None,
+    ):
         path = f"/systems/{system_symbol}/waypoints"
         path += f"?page={page}&limit={limit}"
         if type:
@@ -189,12 +211,30 @@ class SpaceTradersApi:
         r = self.my_req(path, "get")
         return r
 
-    def supply_construction(self, waypoint_symbol: str, ship_symbol: str | Ship, trade_symbol: str | TradeSymbol, units: int):
-        """Supply a construction site with the specified good. Requires a waypoint with a property of `isUnderConstruction` to be true.\n\nThe good must be in your ship's cargo. The good will be removed from your ship's cargo and added to the construction site's materials."""
+    def supply_construction(
+        self,
+        waypoint_symbol: str,
+        ship_symbol: str | Ship,
+        trade_symbol: str | TradeSymbol,
+        units: int,
+    ):
+        """Supply a construction site with the specified good. Requires a waypoint with a property of `isUnderConstruction` to be true.\n
+        The good must be in your ship's cargo. The good will be removed from your ship's cargo and added to the construction site's materials."""
         system_symbol = system_symbol_from_waypoint_symbol(waypoint_symbol)
-        path = f"/systems/{system_symbol}/waypoints/{waypoint_symbol}/construction/supply"
-        r = self.my_req(path, "post", data={"shipSymbol": ship_symbol if isinstance(
-            ship_symbol, str) else ship_symbol.symbol, "tradeSymbol": trade_symbol, "units": units})
+        path = (
+            f"/systems/{system_symbol}/waypoints/{waypoint_symbol}/construction/supply"
+        )
+        r = self.my_req(
+            path,
+            "post",
+            data={
+                "shipSymbol": (
+                    ship_symbol if isinstance(ship_symbol, str) else ship_symbol.symbol
+                ),
+                "tradeSymbol": trade_symbol,
+                "units": units,
+            },
+        )
         return r
 
     # endregion
@@ -214,9 +254,19 @@ class SpaceTradersApi:
         r = self.my_req(path, "post")
         return r
 
-    def deliver_contract(self, contract_id: str, ship_symbol: str, trade_symbol: str, units: int):
+    def deliver_contract(
+        self, contract_id: str, ship_symbol: str, trade_symbol: str, units: int
+    ):
         path = f"/my/contracts/{contract_id}/deliver"
-        r = self.my_req(path, "post", data={"shipSymbol": ship_symbol, "tradeSymbol": trade_symbol, "units": units})
+        r = self.my_req(
+            path,
+            "post",
+            data={
+                "shipSymbol": ship_symbol,
+                "tradeSymbol": trade_symbol,
+                "units": units,
+            },
+        )
         return r
 
     def fulfill_contract(self, contract_id: str):
@@ -235,6 +285,7 @@ class SpaceTradersApi:
         path = f"/factions/{faction_symbol}"
         r = self.my_req(path, "get")
         return r
+
     # endregion
     # region Fleet
 
@@ -246,7 +297,9 @@ class SpaceTradersApi:
     def purchase_ship(self, ship_type: str, waypoint_symbol: str):
         path = "/my/ships"
         r = self.my_req(
-            path, "post", data={"shipType": ship_type, "waypointSymbol": waypoint_symbol}
+            path,
+            "post",
+            data={"shipType": ship_type, "waypointSymbol": waypoint_symbol},
         )
         return r
 
@@ -301,7 +354,8 @@ class SpaceTradersApi:
         return r
 
     def siphon(self, ship_symbol: str):
-        """Siphon gases, such as hydrocarbon, from gas giants.\n\nThe ship must be in orbit to be able to siphon and must have siphon mounts and a gas processor installed."""
+        """Siphon gases, such as hydrocarbon, from gas giants.\n
+        The ship must be in orbit to be able to siphon and must have siphon mounts and a gas processor installed."""
         path = f"/my/ships/{ship_symbol}/siphon"
         r = self.my_req(path, "post")
         return r
@@ -386,9 +440,19 @@ class SpaceTradersApi:
         r = self.my_req(path, "post", data={"symbol": symbol, "units": units})
         return r
 
-    def transfer(self, ship_symbol: str, symbol: str, units: int, recv_ship_symbol: str):
+    def transfer(
+        self, ship_symbol: str, symbol: str, units: int, recv_ship_symbol: str
+    ):
         path = f"/my/ships/{ship_symbol}/transfer"
-        r = self.my_req(path, "post", data={"tradeSymbol": symbol, "units": units, "shipSymbol": recv_ship_symbol})
+        r = self.my_req(
+            path,
+            "post",
+            data={
+                "tradeSymbol": symbol,
+                "units": units,
+                "shipSymbol": recv_ship_symbol,
+            },
+        )
         return r
 
     # endregion

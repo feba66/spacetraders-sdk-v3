@@ -1,7 +1,6 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta
+import datetime as dt
 from functools import wraps
-from multiprocessing import Pool
 from threading import Lock, Semaphore
 import time
 from typing import Any
@@ -23,25 +22,30 @@ class Limiter:
 
     def check_reset(self):
         with self.lock:
-            if self.time != None and (datetime.utcnow() - self.time).total_seconds() > 0:
+            if (
+                self.time is not None
+                and (datetime.now(dt.UTC) - self.time).total_seconds() > 0
+            ):
                 self.sema._value = self.points
                 self.time = None
                 return True
         return False
 
     def aquire(self):
-        if self.time == None:
+        if self.time is None:
             with self.lock:
-                if self.time == None:  # weird but im thinking about an edge case here
-                    self.time = datetime.utcnow()
+                if self.time is None:  # weird but im thinking about an edge case here
+                    self.time = datetime.now(dt.UTC)
                     self.time += timedelta(seconds=self.duration)
         return self.sema.acquire(blocking=False)
 
     def time_to_reset(self):
-        return (self.time - datetime.utcnow()).total_seconds() if self.time != None else 0
+        return (
+            (self.time - datetime.now(dt.UTC)).total_seconds() if self.time is not None else 0
+        )
 
     def sleep(self):
-        time.sleep(max((self.duration-self.time_to_reset())*.95, .01))
+        time.sleep(max((self.duration - self.time_to_reset()) * 0.95, 0.01))
 
     def __call__(self, func) -> Any:
         @wraps(func)
@@ -52,9 +56,10 @@ class Limiter:
                 if not self.check_reset():
                     self.sleep()
 
-            # print(f"{datetime.utcnow()} ", end="")
+            # print(f"{datetime.now(dt.UTC)} ", end="")
             r = func(*args, **kwargs)
             return r
+
         return wrapper
 
 
@@ -76,9 +81,16 @@ class BurstyLimiter:
 
             while (not self.static.aquire()) and (not self.burst.aquire()):
                 if not self.static.check_reset() and not self.burst.check_reset():
-                    time.sleep(max(min(self.static.time_to_reset(), self.burst.time_to_reset()) * .95, 0))
+                    time.sleep(
+                        max(
+                            min(self.static.time_to_reset(), self.burst.time_to_reset())
+                            * 0.95,
+                            0,
+                        )
+                    )
 
-            # print(f"{datetime.utcnow()} ", end="")
+            # print(f"{datetime.now(dt.UTC)} ", end="")
             r = func(*args, **kwargs)
             return r
+
         return wrapper

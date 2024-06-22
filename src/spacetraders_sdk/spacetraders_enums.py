@@ -31,14 +31,14 @@ class Deposits(myEnum):
 
 
 class Produce(myEnum):
-    IRON = "IRON",
-    COPPER = "COPPER",
-    SILVER = "SILVER",
-    GOLD = "GOLD",
-    ALUMINUM = "ALUMINUM",
-    PLATINUM = "PLATINUM",
-    URANITE = "URANITE",
-    MERITIUM = "MERITIUM",
+    IRON = ("IRON",)
+    COPPER = ("COPPER",)
+    SILVER = ("SILVER",)
+    GOLD = ("GOLD",)
+    ALUMINUM = ("ALUMINUM",)
+    PLATINUM = ("PLATINUM",)
+    URANITE = ("URANITE",)
+    MERITIUM = ("MERITIUM",)
     FUEL = "FUEL"
 
 
@@ -60,8 +60,8 @@ class ShipRole(myEnum):
 
 
 class ContractType(myEnum):
-    PROCUREMENT = "PROCUREMENT",
-    TRANSPORT = "TRANSPORT",
+    PROCUREMENT = "PROCUREMENT"
+    TRANSPORT = "TRANSPORT"
     SHUTTLE = "SHUTTLE"
 
 
@@ -154,12 +154,6 @@ class ErrorCodes(myEnum):
     registerAgentExistsError = 4109
     cooldownConflictError = 4000
     waypointNoAccessError = 4001
-
-
-class ContractType(myEnum):
-    PROCUREMENT = "PROCUREMENT"
-    TRANSPORT = "TRANSPORT"
-    SHUTTLE = "SHUTTLE"
 
 
 class FactionTraitSymbol(myEnum):
@@ -257,14 +251,14 @@ class WaypointType(myEnum):
     ORBITAL_STATION = "ORBITAL_STATION"
     JUMP_GATE = "JUMP_GATE"
     ASTEROID_FIELD = "ASTEROID_FIELD"
-    ASTEROID="ASTEROID"
-    ENGINEERED_ASTEROID="ENGINEERED_ASTEROID"
-    ASTEROID_BASE="ASTEROID_BASE"
+    ASTEROID = "ASTEROID"
+    ENGINEERED_ASTEROID = "ENGINEERED_ASTEROID"
+    ASTEROID_BASE = "ASTEROID_BASE"
     NEBULA = "NEBULA"
     DEBRIS_FIELD = "DEBRIS_FIELD"
     GRAVITY_WELL = "GRAVITY_WELL"
-    ARTIFICIAL_GRAVITY_WELL="ARTIFICIAL_GRAVITY_WELL"
-    FUEL_STATION="FUEL_STATION"    
+    ARTIFICIAL_GRAVITY_WELL = "ARTIFICIAL_GRAVITY_WELL"
+    FUEL_STATION = "FUEL_STATION"
 
 
 class WaypointTraitSymbols(myEnum):
@@ -276,6 +270,7 @@ class WaypointTraitSymbols(myEnum):
     SCATTERED_SETTLEMENTS = "SCATTERED_SETTLEMENTS"
     SPRAWLING_CITIES = "SPRAWLING_CITIES"
     MEGA_STRUCTURES = "MEGA_STRUCTURES"
+    PIRATE_BASE = "PIRATE_BASE"
     OVERCROWDED = "OVERCROWDED"
     HIGH_TECH = "HIGH_TECH"
     CORRUPT = "CORRUPT"
@@ -565,6 +560,7 @@ class TradeSymbol(myEnum):
     MOUNT_LASER_CANNON_I = "MOUNT_LASER_CANNON_I"
     MOUNT_MISSILE_LAUNCHER_I = "MOUNT_MISSILE_LAUNCHER_I"
     MOUNT_TURRET_I = "MOUNT_TURRET_I"
+    FAB_MATS = "FAB_MATS"
 
 
 class ActivityLevel(myEnum):
@@ -585,4 +581,6 @@ class WaypointModifierType(myEnum):
     RADIATION_LEAK = "RADIATION_LEAK"
     CRITICAL_LIMIT = "CRITICAL_LIMIT"
     CIVIL_UNREST = "CIVIL_UNREST"
+
+
 # endregion
